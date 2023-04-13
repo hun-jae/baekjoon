@@ -12,6 +12,7 @@ for idx, cur in enumerate(arr):
         if left == -1:
             left = idx
         right = idx
+
     else:
         max_ += 1
         if left != -1:
@@ -19,16 +20,12 @@ for idx, cur in enumerate(arr):
             cnt_r += 1
 cnt_r -= cnt_r_after_k
 
-if cnt_r == 0:
-    print(max_)
-    exit(0)
-
-val = 2 + cnt_r
+val = 2 + cnt_r if cnt_r != 0 else cnt_r
 max_ = max(max_, val)
-while True:
-    if cnt_r <= 0:
-        break
+
+while cnt_r != 0:
     cur_cnt = 0
+
     for l in range(left+1, right+1):
         if arr[l] == "K":
             left = l
@@ -36,24 +33,18 @@ while True:
         else:
             cur_cnt += 1
 
-    for l in range(right-1, left-1, -1):
-        if arr[l] == "K":
-            right = l
+    for r in range(right-1, left-1, -1):
+        if arr[r] == "K":
+            right = r
             break
         else:
             cur_cnt += 1
-    cnt_r -= cur_cnt
-    if cnt_r <= 0:
+    cnt_r -= cur_cnt #cnt_r := K내부에 있는 R의 개수
+
+    if cnt_r <= 0: #내부의 R이 다 빠졌다면 max바꾸지 말고 끝냄
         break
 
-    if left==right:
-        val += (1-cur_cnt)
-        max_ = max(max_, val)
-        break
-    elif left > right:
-        break
-    else:
-        val += (2-cur_cnt)
-        max_ = max(max_, val)
+    val += (2-cur_cnt)
+    max_ = max(max_, val)
 
 print(max_)
